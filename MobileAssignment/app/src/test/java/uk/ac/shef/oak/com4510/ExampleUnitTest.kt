@@ -1,4 +1,4 @@
-package com.mirceaegry.mobileassignment
+package uk.ac.shef.oak.com4510
 
 import org.junit.Test
 
