@@ -5,9 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.TypeConverters
 
 @Dao
-public interface ImageDao {
+@TypeConverters(Converters::class)
+interface ImageDao {
 
     @Query("SELECT * FROM Image WHERE path_id = :path_id")
     fun findImagesByPathId(path_id: Int): LiveData<MutableList<Image>>
