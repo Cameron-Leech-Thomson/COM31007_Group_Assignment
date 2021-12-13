@@ -3,10 +3,9 @@ package uk.ac.shef.oak.com4510
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
-import com.example.lab2.CameraInteraction
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -14,6 +13,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import uk.ac.shef.oak.com4510.databinding.ActivityMapsBinding
+import uk.ac.shef.oak.com4510.sensors.Sensors
+import uk.ac.shef.oak.com4510.sensors.CameraInteraction
+import kotlin.system.exitProcess
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -23,6 +25,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val sensors = Sensors(this)
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -34,7 +37,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        binding.fab.setOnClickListener(CameraListener(camera))
+        binding.fab.setOnClickListener(CameraListener(camera, sensors))
     }
 
     /**
@@ -58,10 +61,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     /**
      * OnClickListener instance specifically to run the Camera class when activated.
      */
-    private class CameraListener(val camera: CameraInteraction) : View.OnClickListener{
+    private class CameraListener(val camera: CameraInteraction, val sensors: Sensors) : View.OnClickListener{
         @RequiresApi(Build.VERSION_CODES.N)
         override fun onClick(v: View?) {
             camera.openCamera()
+            sensors.getSensorData()
         }
     }
 }
