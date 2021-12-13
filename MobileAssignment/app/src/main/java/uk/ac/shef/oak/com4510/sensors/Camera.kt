@@ -6,8 +6,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import pl.aprilapps.easyphotopicker.*
 import uk.ac.shef.oak.com4510.*
-import uk.ac.shef.oak.com4510.sensors.ImageElement
-import java.util.ArrayList
 
 @RequiresApi(Build.VERSION_CODES.N)
 class CameraInteraction constructor(private val mainActivity: MapsActivity) : AppCompatActivity(){
