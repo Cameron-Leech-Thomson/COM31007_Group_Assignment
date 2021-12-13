@@ -1,86 +1,58 @@
 package com.example.lab2
 
 import android.content.Intent
-import android.icu.text.SimpleDateFormat
 import android.os.Build
-import android.os.Environment
-import android.provider.MediaStore
 import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat.startActivityForResult
-import android.net.Uri
-import android.util.Log
-import androidx.core.content.FileProvider
+import androidx.appcompat.app.AppCompatActivity
+import pl.aprilapps.easyphotopicker.*
 import uk.ac.shef.oak.com4510.*
-import java.io.File
-import java.io.IOException
-import java.util.*
+import uk.ac.shef.oak.com4510.sensors.ImageElement
+import java.util.ArrayList
 
 @RequiresApi(Build.VERSION_CODES.N)
-class Camera constructor(private val mainActivity: MapsActivity){
+class CameraInteraction constructor(private val mainActivity: MapsActivity) : AppCompatActivity(){
 
-    fun takePicture(){
-        Log.e("Hi!", "takePicture()")
-        // Open Camera:
-        dispatchTakePictureIntent()
+    private var easyImage: EasyImage
+
+    init {
+        easyImage = EasyImage.Builder(mainActivity)
+            .setChooserTitle("Pick media")
+            .setFolderName("EasyImage sample")
+            .setChooserType(ChooserType.CAMERA_AND_GALLERY)
+            .allowMultiple(false)
+            .setCopyImagesToPublicGalleryFolder(true)
+            .build()
     }
 
-    private val REQUEST_IMAGE_CAPTURE = 1
+    fun openCamera(){
+        easyImage.openChooser(mainActivity)
+    }
 
-    private fun dispatchTakePictureIntent() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            // Ensure that there's a camera activity to handle the intent
-            takePictureIntent.resolveActivity(mainActivity.packageManager)?.also {
-                // Create the File where the photo should go
-                val photoFile: File? = try {
-                    Log.d("PhotoFile", "Trying CreateImageFile()")
-                    createImageFile()
-                } catch (ex: IOException) {
-                    // Error occurred while creating the File
-                    Log.d("Error!","CreateImageFile() Failed!!!!")
-                    null
+    fun getImageFile(): MediaFile?{
+        return if (::imageFile.isInitialized){
+            imageFile
+        }else{
+            null
+        }
+    }
+
+    private lateinit var imageFile: MediaFile
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        easyImage.handleActivityResult(requestCode, resultCode,data,mainActivity,
+            object: DefaultCallback() {
+                override fun onMediaFilesPicked(imageFiles: Array<MediaFile>, source: MediaSource) {
+                    // Only returns 1 image, so take the first from the array.
+                    imageFile = imageFiles[0]
                 }
-                // Continue only if the File was successfully created
-                photoFile?.also {
-                    val photoURI: Uri = FileProvider.getUriForFile(
-                        mainActivity.applicationContext,
-                        "com.example.android.fileprovider",
-                        it
-                    )
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                    startActivityForResult(mainActivity, takePictureIntent, REQUEST_IMAGE_CAPTURE, null)
+                override fun onImagePickerError(error: Throwable, source: MediaSource) {
+                    super.onImagePickerError(error, source)
                 }
-            }
-        }
-    }
-
-    lateinit var currentPhotoPath: String
-
-    @Throws(IOException::class)
-    private fun createImageFile(): File {
-        // Get primary locale:
-        val locale = mainActivity.resources.configuration.locales.get(0)
-        Log.d("Locale", locale.toString())
-        // Create an image file name
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", locale).format(Date())
-        Log.d("timeStamp", timeStamp)
-        val storageDir: File? = mainActivity.applicationContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        Log.d("StorageDir", storageDir.toString())
-        return File.createTempFile(
-            "JPEG_${timeStamp}_", /* prefix */
-            ".jpg", /* suffix */
-            storageDir /* directory */
-        ).apply {
-            // Save a file: path for use with ACTION_VIEW intents
-            currentPhotoPath = this.absolutePath
-        }
-    }
-
-    private fun galleryAddPic() {
-        Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).also { mediaScanIntent ->
-            val f = File(currentPhotoPath)
-            mediaScanIntent.data = Uri.fromFile(f)
-            mainActivity.applicationContext.sendBroadcast(mediaScanIntent)
-        }
+                override fun onCanceled(source: MediaSource) {
+                    super.onCanceled(source)
+                }
+            })
     }
 
 }
