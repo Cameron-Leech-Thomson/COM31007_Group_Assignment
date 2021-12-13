@@ -12,6 +12,7 @@ import java.util.Date
         onDelete = CASCADE
     )]
 )
+@TypeConverters(Converters::class)
 data class Image(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "image_id")

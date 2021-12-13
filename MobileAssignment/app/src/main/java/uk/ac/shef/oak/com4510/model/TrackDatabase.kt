@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.Room.databaseBuilder
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -13,7 +14,8 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 @Database(entities = [Image::class, Path::class], version = 1, exportSchema = false)
-public abstract class TrackDatabase: RoomDatabase() {
+@TypeConverters(Converters::class)
+abstract class TrackDatabase: RoomDatabase() {
 
     abstract fun imageDao(): ImageDao
     abstract fun pathDao(): PathDao
