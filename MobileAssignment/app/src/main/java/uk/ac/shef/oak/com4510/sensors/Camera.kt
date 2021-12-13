@@ -12,6 +12,10 @@ class CameraInteraction constructor(private val mainActivity: MapsActivity) : Ap
 
     private var easyImage: EasyImage
 
+    /**
+     * Initialise the EasyImage object, set chooser to both camera & gallery, and
+     * not allow multiple images at a time.
+     */
     init {
         easyImage = EasyImage.Builder(mainActivity)
             .setChooserTitle("Pick media")
@@ -22,10 +26,18 @@ class CameraInteraction constructor(private val mainActivity: MapsActivity) : Ap
             .build()
     }
 
+    /**
+     * Open the chooser for the camera or gallery.
+     */
     fun openCamera(){
         easyImage.openChooser(mainActivity)
     }
 
+    /**
+     * Returns either the current imageFile stored in the var, or null if it has not been
+     * initialised yet.
+     * @return imageFile : MediaFile?
+     */
     fun getImageFile(): MediaFile?{
         return if (::imageFile.isInitialized){
             imageFile
@@ -36,6 +48,10 @@ class CameraInteraction constructor(private val mainActivity: MapsActivity) : Ap
 
     private lateinit var imageFile: MediaFile
 
+    /**
+     * When activity has been completed, obtain the result, and process it.
+     * Only sets an image file it is the correct type, otherwise do nothing.
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         easyImage.handleActivityResult(requestCode, resultCode,data,mainActivity,

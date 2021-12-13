@@ -55,9 +55,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
 
+    /**
+     * OnClickListener instance specifically to run the Camera class when activated.
+     */
     private class CameraListener(val camera: CameraInteraction) : View.OnClickListener{
         @RequiresApi(Build.VERSION_CODES.N)
         override fun onClick(v: View?) {
+            camera.openCamera()
         }
     }
 }
