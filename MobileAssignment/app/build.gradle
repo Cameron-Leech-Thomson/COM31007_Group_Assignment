@@ -62,4 +62,6 @@ dependencies {
 
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
     implementation 'com.github.jkwiecien:EasyImage:3.2.0'
+
+    implementation 'androidx.navigation:navigation-ui:2.1.0'
 }
