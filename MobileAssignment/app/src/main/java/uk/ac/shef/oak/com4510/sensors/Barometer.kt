@@ -19,7 +19,7 @@ import androidx.lifecycle.MutableLiveData
 import java.lang.Exception
 
 class Barometer(context: Context, controller: SensorsController) {
-    private val BAROMETER_READING_FREQ_MICRO_SEC: Int = 120000
+    private val BAROMETER_READING_FREQ_MICRO_SEC: Int = 60000
     private var samplingRateInMicroSec: Long = BAROMETER_READING_FREQ_MICRO_SEC.toLong()
     private var samplingRateInNanoSec: Long = samplingRateInMicroSec * 1000
     private var timePhoneWasLastRebooted: Long = 0
@@ -65,12 +65,6 @@ class Barometer(context: Context, controller: SensorsController) {
                     // when there is a new pressue value - no need for a UI update otherwise
                     if(pressureReading.value != event.values[0]){pressureReading.value = event.values[0]}
                     val accuracy = event.accuracy
-                    Log.i(
-                        TAG,
-                        controller.mSecsToString(actualTimeInMseconds) +
-                                ": current barometric pressure: " +
-                                pressureReading.value + "with accuracy: " + accuracy
-                    )
                     this@Barometer.lastReportTime = event.timestamp
                     // if we have not see any movement on the side of the accelerometer, let's stop
                     val timeLag = actualTimeInMseconds - accelerometer.getLastReportTime()

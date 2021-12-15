@@ -19,7 +19,7 @@ import androidx.lifecycle.MutableLiveData
 import java.lang.Exception
 
 class Hygrometer(context: Context, controller: SensorsController) {
-    private val HYGROMETER_READING_FREQ_MICRO_SEC: Int = 120000
+    private val HYGROMETER_READING_FREQ_MICRO_SEC: Int = 60000
     private var samplingRateInMicroSec: Long = HYGROMETER_READING_FREQ_MICRO_SEC.toLong()
     private var samplingRateInNanoSec: Long = samplingRateInMicroSec * 1000
     private var timePhoneWasLastRebooted: Long = 0
@@ -57,12 +57,6 @@ class Hygrometer(context: Context, controller: SensorsController) {
                         this@Hygrometer.timePhoneWasLastRebooted + (event.timestamp / 1000000.0).toLong()
                     if(humidityReading.value != event.values[0]){humidityReading.value = event.values[0]}
                     val accuracy = event.accuracy
-                    Log.i(
-                        TAG,
-                        controller.mSecsToString(actualTimeInMseconds) +
-                                ": current ambient humidity: " +
-                                humidityReading.value + "with accuracy: " + accuracy
-                    )
                     this@Hygrometer.lastReportTime = event.timestamp
                     // if we have not see any movement on the side of the accelerometer, let's stop
                     val timeLag = actualTimeInMseconds - accelerometer.getLastReportTime()

@@ -35,9 +35,9 @@ class SensorsController constructor(private val mainActivity: MapsActivity,
     private var locationService = LocationService()
     private var cancelLocationSource = CancellationTokenSource()
 
-    private var pressure: Float? = null
-    private var temperature: Float? = null
-    private var humidity: Float? = null
+    private var pressure: Float = 0f
+    private var temperature: Float = 0f
+    private var humidity: Float = 0f
 
     private var barometer: Barometer = Barometer(mainActivity, this)
     private var thermometer: Thermometer = Thermometer(mainActivity,this)
@@ -80,31 +80,8 @@ class SensorsController constructor(private val mainActivity: MapsActivity,
         this.startSensing()
     }
 
-    fun getSensorData(): FloatArray{
-        var data = FloatArray(3)
-        if (pressure != null && temperature != null && humidity != null) {
-            data[0] = pressure!!
-            data[1] = temperature!!
-            data[2] = humidity!!
-        }
-
-        return data
-    }
-
-    override fun onResume() {
-        super.onResume()
-        this.startSensing()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        this.startSensing()
-        Log.d("SENSORS","Started Sensing")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        this.stopSensing()
+    fun getSensorData(): Array<Float?>{
+        return arrayOf(temperature, pressure, humidity)
     }
 
     private lateinit var latLng: LatLng
@@ -172,7 +149,7 @@ class SensorsController constructor(private val mainActivity: MapsActivity,
     /**
      * Calls the needed sensor class to start monitoring the sensor data
      */
-    private fun startSensing() {
+    fun startSensing() {
         accelerometer.startAccelerometerSensing()
     }
 
@@ -180,7 +157,7 @@ class SensorsController constructor(private val mainActivity: MapsActivity,
     /**
      * Calls the needed sensor class to stop monitoring the sensor data
      */
-    private fun stopSensing() {
+    fun stopSensing() {
         accelerometer.stopAccelerometerSensing()
     }
 

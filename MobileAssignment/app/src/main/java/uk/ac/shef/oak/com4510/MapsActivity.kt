@@ -34,12 +34,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        sensorsController = SensorsController(this, fusedLocationClient)
+        sensorsController.requestLocation()
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val camera = CameraInteraction(this)
-        sensorsController = SensorsController(this, fusedLocationClient)
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -47,13 +48,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
         binding.fab.setOnClickListener(CameraListener(camera, sensorsController))
-        sensorsController.requestLocation()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sensorsController.stopSensing()
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onResume() {
         super.onResume()
         sensorsController.requestLocation()
+        sensorsController.startSensing()
     }
 
     /**

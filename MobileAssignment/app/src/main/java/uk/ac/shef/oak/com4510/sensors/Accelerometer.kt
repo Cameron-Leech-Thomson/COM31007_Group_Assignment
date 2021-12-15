@@ -80,10 +80,6 @@ class Accelerometer(context: Context, controller: SensorsController, barometer: 
                 if (deltaY < 2) deltaY = 0f
                 if (deltaZ < 2) deltaZ = 0f
                 if (deltaX > 0 || deltaY > 0 || deltaZ > 0) {
-                    Log.i(
-                        TAG,
-                        "$timeString: significant motion detected - x: $deltaX, y: $deltaY, z:$deltaZ"
-                    )
                     if (!barometer.isStarted) barometer.startBarometerSensing(this@Accelerometer)
                     if (!thermometer.isStarted) thermometer.startThermometerSensing(this@Accelerometer)
                     if (!hygrometer.isStarted) hygrometer.startHygrometerSensing(this@Accelerometer)

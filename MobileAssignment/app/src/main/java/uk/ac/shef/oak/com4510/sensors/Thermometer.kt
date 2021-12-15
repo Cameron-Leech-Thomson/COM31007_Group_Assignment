@@ -19,7 +19,7 @@ import androidx.lifecycle.MutableLiveData
 import java.lang.Exception
 
 class Thermometer(context: Context, controller: SensorsController) {
-    private val THERMOMETER_READING_FREQ_MICRO_SEC: Int = 120000
+    private val THERMOMETER_READING_FREQ_MICRO_SEC: Int = 60000
     private var samplingRateInMicroSec: Long = THERMOMETER_READING_FREQ_MICRO_SEC.toLong()
     private var samplingRateInNanoSec: Long = samplingRateInMicroSec * 1000
     private var timePhoneWasLastRebooted: Long = 0
@@ -57,12 +57,6 @@ class Thermometer(context: Context, controller: SensorsController) {
                         this@Thermometer.timePhoneWasLastRebooted + (event.timestamp / 1000000.0).toLong()
                     if(temperatureReading.value != event.values[0]){temperatureReading.value = event.values[0]}
                     val accuracy = event.accuracy
-                    Log.i(
-                        TAG,
-                        controller.mSecsToString(actualTimeInMseconds) +
-                                ": current ambient temperature: " +
-                                temperatureReading.value + "with accuracy: " + accuracy
-                    )
                     this@Thermometer.lastReportTime = event.timestamp
                     // if we have not see any movement on the side of the accelerometer, let's stop
                     val timeLag = actualTimeInMseconds - accelerometer.getLastReportTime()
