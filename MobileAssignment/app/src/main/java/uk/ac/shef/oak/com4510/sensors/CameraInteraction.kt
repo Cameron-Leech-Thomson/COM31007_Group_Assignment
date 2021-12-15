@@ -1,4 +1,4 @@
-package com.example.lab2
+package uk.ac.shef.oak.com4510.sensors
 
 import android.content.Intent
 import android.os.Build

@@ -2,7 +2,9 @@ package uk.ac.shef.oak.com4510.model
 
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
-import java.util.Date
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 class Converters {
     @TypeConverter
