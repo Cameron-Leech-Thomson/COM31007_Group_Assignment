@@ -50,6 +50,8 @@
             </intent-filter>
         </activity>
 
+    <activity android:name=".MapsActivity" />
+
         <service
             android:name="uk.ac.shef.oak.com4510.sensors.LocationService"
             android:foregroundServiceType="location"  >

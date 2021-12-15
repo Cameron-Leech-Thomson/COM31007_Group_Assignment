@@ -1,18 +1,21 @@
 package uk.ac.shef.oak.com4510.views
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import uk.ac.shef.oak.com4510.MapsActivity
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.model.Path
 import uk.ac.shef.oak.com4510.viewmodels.PathViewModel
@@ -39,6 +42,7 @@ class HomeFragment: Fragment(), View.OnFocusChangeListener {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -49,8 +53,10 @@ class HomeFragment: Fragment(), View.OnFocusChangeListener {
         startButton = getView()?.findViewById(R.id.Start)
 
         startButton?.setOnClickListener(View.OnClickListener {
+            val config = this.context?.resources?.configuration
+            val locale = config!!.locales[0]
 
-            val dateFormat: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+            val dateFormat: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", locale)
 
             try {
                 date = dateFormat.parse(dateFormat.format(Calendar.getInstance().time))
@@ -67,6 +73,8 @@ class HomeFragment: Fragment(), View.OnFocusChangeListener {
                 GlobalScope.launch(Dispatchers.IO) {
                     insertPath(pathViewModel!!, path)
                 }
+                val intent: Intent = Intent(activity, MapsActivity::class.java)
+                startActivity(intent)
             }
         })
     }
