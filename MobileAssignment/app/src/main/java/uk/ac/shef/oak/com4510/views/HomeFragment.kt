@@ -9,6 +9,10 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.model.Path
 import uk.ac.shef.oak.com4510.viewmodels.PathViewModel
@@ -58,7 +62,11 @@ class HomeFragment: Fragment(), View.OnFocusChangeListener {
             if (title?.text.toString() == "") {
                 title?.setError("this field cant be blank")
             } else {
+                val path = Path(0, title?.text.toString(), date!!, "null", "null")
 
+                GlobalScope.launch(Dispatchers.IO) {
+                    insertPath(pathViewModel!!, path)
+                }
             }
         })
     }

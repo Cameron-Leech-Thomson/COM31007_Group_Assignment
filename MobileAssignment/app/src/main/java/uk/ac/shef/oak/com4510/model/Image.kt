@@ -16,7 +16,7 @@ import java.util.Date
 data class Image(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "image_id")
-    var image_id: Int = 0,
+    var image_id: Int,
 
     @ColumnInfo(name = "uri")
     var imageUri: String,

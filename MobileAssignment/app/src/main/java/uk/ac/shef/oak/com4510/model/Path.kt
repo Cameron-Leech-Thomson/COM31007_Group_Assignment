@@ -1,15 +1,12 @@
 package uk.ac.shef.oak.com4510.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
+import androidx.room.*
 import java.util.*
 
 @Entity
 data class Path(
     @PrimaryKey(autoGenerate = true)
-    var path_id: Int,
+    var path_id: Long,
 
     @ColumnInfo(name = "path_title")
     var title: String,
@@ -24,6 +21,6 @@ data class Path(
     var temperature: String,
 
 
-){
+    ){
 
 }

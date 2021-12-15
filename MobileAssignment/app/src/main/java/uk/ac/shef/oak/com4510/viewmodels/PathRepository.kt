@@ -30,7 +30,7 @@ class PathRepository(application: Application) {
         private class InsertAsyncTask(private val dao: PathDao?) : ViewModel() {
             suspend fun insertInBackground(path: Path) {
                 scope.launch {
-                    val insertId: Int? = this@InsertAsyncTask.dao?.insertPath(path)?.toString()?.toInt()
+                    this@InsertAsyncTask.dao?.insertPath(path)?.toString()
                 }
             }
         }
