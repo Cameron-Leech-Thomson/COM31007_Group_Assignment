@@ -10,21 +10,17 @@ import uk.ac.shef.oak.com4510.*
 @RequiresApi(Build.VERSION_CODES.N)
 class CameraInteraction constructor(private val mainActivity: MapsActivity) : AppCompatActivity(){
 
-    private var easyImage: EasyImage
-
     /**
      * Initialise the EasyImage object, set chooser to both camera & gallery, and
      * not allow multiple images at a time.
      */
-    init {
-        easyImage = EasyImage.Builder(mainActivity)
-            .setChooserTitle("Pick media")
-            .setFolderName("EasyImage sample")
-            .setChooserType(ChooserType.CAMERA_AND_GALLERY)
-            .allowMultiple(false)
-            .setCopyImagesToPublicGalleryFolder(true)
-            .build()
-    }
+    private var easyImage: EasyImage = EasyImage.Builder(mainActivity)
+        .setChooserTitle("Pick media")
+        .setFolderName("EasyImage sample")
+        .setChooserType(ChooserType.CAMERA_AND_GALLERY)
+        .allowMultiple(false)
+        .setCopyImagesToPublicGalleryFolder(true)
+        .build()
 
     /**
      * Open the chooser for the camera or gallery.

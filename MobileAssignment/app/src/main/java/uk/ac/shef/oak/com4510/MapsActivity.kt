@@ -17,7 +17,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.coroutines.test.withTestContext
 import uk.ac.shef.oak.com4510.databinding.ActivityMapsBinding
 import uk.ac.shef.oak.com4510.sensors.SensorsController
 import uk.ac.shef.oak.com4510.sensors.CameraInteraction
@@ -47,7 +46,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        binding.fab.setOnClickListener(CameraListener(camera, sensorsController))
+        binding.fabCamera.setOnClickListener(CameraListener(camera, sensorsController))
     }
 
     override fun onPause() {
@@ -60,6 +59,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onResume()
         sensorsController.requestLocation()
         sensorsController.startSensing()
+
+        // Check ImageFile has been created from camera.kt:
+        //if (camera)
     }
 
     /**
