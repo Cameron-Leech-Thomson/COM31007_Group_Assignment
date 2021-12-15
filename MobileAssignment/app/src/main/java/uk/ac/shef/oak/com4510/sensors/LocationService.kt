@@ -22,7 +22,7 @@ class LocationService : Service() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun getRequest(): ActivityResultLauncher<Array<String>> {
+    fun getRequest() {
         locationPermissionRequest = mainActivity.registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             when {
@@ -36,9 +36,11 @@ class LocationService : Service() {
             }
             }
         }
-        return locationPermissionRequest
     }
 
+    fun getPermissions(): ActivityResultLauncher<Array<String>>{
+        return locationPermissionRequest
+    }
 
     override fun onBind(intent: Intent?): IBinder? {
         Log.d("LocationService", "onBind!")

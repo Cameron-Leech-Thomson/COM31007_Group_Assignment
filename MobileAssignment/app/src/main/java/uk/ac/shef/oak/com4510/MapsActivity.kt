@@ -1,13 +1,14 @@
 package uk.ac.shef.oak.com4510
 
-import android.content.Intent
-import android.location.Location
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -16,38 +17,43 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.selects.whileSelect
+import kotlinx.coroutines.test.withTestContext
 import uk.ac.shef.oak.com4510.databinding.ActivityMapsBinding
-import uk.ac.shef.oak.com4510.sensors.Sensors
+import uk.ac.shef.oak.com4510.sensors.SensorsController
 import uk.ac.shef.oak.com4510.sensors.CameraInteraction
-import uk.ac.shef.oak.com4510.sensors.LocationService
-import kotlin.system.exitProcess
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var sensorsController: SensorsController
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val camera = CameraInteraction(this)
-        val sensors = Sensors(this, fusedLocationClient)
+        sensorsController = SensorsController(this, fusedLocationClient)
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        binding.fab.setOnClickListener(CameraListener(camera, sensors))
+        binding.fab.setOnClickListener(CameraListener(camera, sensorsController))
+        sensorsController.requestLocation()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onResume() {
+        super.onResume()
+        sensorsController.requestLocation()
     }
 
     /**
@@ -72,12 +78,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      * OnClickListener instance specifically to run the Camera class when activated.
      */
     inner class CameraListener(private val camera: CameraInteraction,
-                               private val sensors: Sensors) : View.OnClickListener{
+                               private val sensors: SensorsController) : View.OnClickListener{
         @RequiresApi(Build.VERSION_CODES.N)
         override fun onClick(v: View?) {
             camera.openCamera()
-            sensors.getSensorData()
-            sensors.requestLocation()
+            val sensorData = sensors.getSensorData()
+            Log.d("Sensor Data:",sensorData[0].toString()+","+sensorData[1].toString()+
+                    ","+sensorData[2].toString())
+            Log.d("LatLong",sensors.getLatLng().toString())
         }
     }
 }
