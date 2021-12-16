@@ -117,7 +117,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
         // Check if an image was taken when focus was lost:
         if (::image.isInitialized){
             // Check that the image is different from the previous:
-            val uri = Uri.fromFile(image.file!!.file)
+            val uri = image.getUri()!!
             if (uri != previousUri) {
                 // If so, pin image:
                 previousUri = uri
@@ -152,6 +152,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
         easyImage.handleActivityResult(requestCode, resultCode,data,this,
             object: DefaultCallback() {
                 override fun onMediaFilesPicked(imageFiles: Array<MediaFile>, source: MediaSource) {
+                    // Only one image returned so .first():
                     image = getImageElements(imageFiles).first()
                     imagesInPath += 1
                 }

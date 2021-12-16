@@ -1,5 +1,6 @@
 package uk.ac.shef.oak.com4510.sensors
 
+import android.net.Uri
 import pl.aprilapps.easyphotopicker.MediaFile
 
 class ImageElement {
@@ -12,5 +13,9 @@ class ImageElement {
 
     constructor(fileX: MediaFile?) {
         file = fileX
+    }
+
+    fun getUri(): Uri?{
+        return Uri.fromFile(file?.file)
     }
 }
