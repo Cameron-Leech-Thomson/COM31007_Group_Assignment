@@ -86,6 +86,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
 
         binding.fabCamera.setOnClickListener(View.OnClickListener {
             if (sensorsController.getLatLng() != null) {
+                sensorsController.requestLocation()
                 easyImage.openChooser(this@MapsActivity)
             } else{
                 Snackbar.make(binding.root,
@@ -98,7 +99,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
         }
         binding.fabSubmit.setOnClickListener(View.OnClickListener {
             if (imagesInPath != 0) {
-
                 for (image in pathImages) {
                     GlobalScope.launch(Dispatchers.IO) {
                         imageViewModel.insertImage(image)
@@ -107,6 +107,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
 
 //                val intent = Intent(this@MapsActivity, GalleryFragment::class.java)
 //                startActivity(intent)
+
             } else {
                 Snackbar.make(binding.root,
                     "Please upload some images to the path before submitting.",
@@ -176,6 +177,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
             .build()
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onPause() {
         super.onPause()
         sensorsController.stopSensing()
@@ -185,6 +187,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
     override fun onResume() {
         super.onResume()
         sensorsController.startSensing()
+        if (sensorsController.getLatLng() != null){
+            sensorsController.requestLocation()
+        }
 
         // Check if an image was taken when focus was lost:
         if (::image.isInitialized){
@@ -200,6 +205,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
                 previousUri = uri
                 Log.d("ImageFile", "ImageFile exists:")
                 Log.d("ImageFile", uri.toString())
+                Log.d("ImageFile", "LatLong:" + sensorsController.getLatLng().toString())
                 pinImage()
             }
         }

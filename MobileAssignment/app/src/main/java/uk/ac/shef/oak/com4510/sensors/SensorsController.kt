@@ -29,6 +29,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
+@RequiresApi(Build.VERSION_CODES.N)
 class SensorsController constructor(private val mainActivity: MapsActivity,
                                     private var fusedLocationService: FusedLocationProviderClient) : Activity() {
 
@@ -48,11 +49,18 @@ class SensorsController constructor(private val mainActivity: MapsActivity,
 
     init{
         locationService.setActivity(mainActivity)
+        val locale = mainActivity.resources.configuration.locales[0]
+        var start = Calendar.getInstance(locale).timeInMillis
+        Log.e("STARTTIME",start.toString())
 
         this.retrieveAccelerometerData().observe(mainActivity,
             { newValue ->
                 newValue?.also{
-                    //Log.i("Data in UI - Accel", "Sensor time: $it[0], Sensor data: $it[1]")
+                    val newtime = Calendar.getInstance(locale).timeInMillis
+                    if (newtime-start > 20000){
+                        requestLocation()
+                        start = newtime
+                    }
                 }
             })
 
