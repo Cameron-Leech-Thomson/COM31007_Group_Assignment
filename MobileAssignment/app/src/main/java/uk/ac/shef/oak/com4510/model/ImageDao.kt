@@ -18,7 +18,7 @@ interface ImageDao {
     fun findImageByImageId(image_id: Int): LiveData<Image>
 
     @Query("SELECT * FROM Image")
-    fun findAllImages(): LiveData<MutableList<Image>>
+    fun findAllImages(): List<Image>
 
     @Insert
     fun insertImage(image: Image)

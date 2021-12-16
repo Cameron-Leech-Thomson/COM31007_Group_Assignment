@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pl.aprilapps.easyphotopicker.MediaFile
@@ -33,7 +35,7 @@ class GalleryFragment: Fragment() {
     private var imageViewModel: ImageViewModel? = null
     private lateinit var galleryAdapter: Adapter<RecyclerView.ViewHolder>
     private var recyclerView: RecyclerView? = null
-    private var dataset: MutableList<Image> = ArrayList()
+    private var dataset: ArrayList<Image> = ArrayList()
 
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -58,7 +60,11 @@ class GalleryFragment: Fragment() {
             e.printStackTrace()
         }
 
+        imageViewModel = ViewModelProvider(this)[ImageViewModel::class.java]
 
+        GlobalScope.launch(Dispatchers.IO) {
+            imageViewModel?.findAllImages()?.let { dataset.addAll(it) }
+        }
 
         recyclerView = v.findViewById(R.id.recycler_view)
         recyclerView?.layoutManager = GridLayoutManager(this.context, 4)

@@ -51,8 +51,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var sensorsController: SensorsController
     private lateinit var easyImage: EasyImage
-    private lateinit var image: ImageElement
-    private lateinit var previousUri: Uri
+    private lateinit var image: MediaFile
+    private lateinit var previousUri: String
     private lateinit var pathTitle: String
     private var pathImages = ArrayList<Image>()
     private var pathID by Delegates.notNull<Int>()
@@ -134,7 +134,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
         // Get sensor data:
         val sensorData = sensorsController.getSensorData()
 
-        val uri = image.getUri().toString()
+        var uri = image.file.absolutePath
+
         // Create image data class:
 
         // DEBUG PRINT PATH ID
@@ -189,7 +190,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
         // Check if an image was taken when focus was lost:
         if (::image.isInitialized){
             // Check that the image is different from the previous:
-            val uri = image.getUri()!!
+            val uri = image.file.absolutePath
             if (!(::previousUri.isInitialized)){
                 previousUri = uri
                 pinImage()
@@ -250,11 +251,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
      * @param returnedPhotos
      * @return list of image elements
      */
-    private fun getImageElements(returnedPhotos: Array<MediaFile>): List<ImageElement> {
-        val imageElementList: MutableList<ImageElement> = ArrayList<ImageElement>()
+    private fun getImageElements(returnedPhotos: Array<MediaFile>): MutableList<MediaFile> {
+        val imageElementList: MutableList<MediaFile> = ArrayList<MediaFile>()
         for (file in returnedPhotos) {
-            val element = ImageElement(file)
-            imageElementList.add(element)
+            imageElementList.add(file)
         }
         return imageElementList
     }

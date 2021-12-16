@@ -8,7 +8,7 @@ import uk.ac.shef.oak.com4510.model.Image
 class ImageViewModel(application: Application) : AndroidViewModel(application) {
     private val imageRepo: ImageRepository = ImageRepository(application)
 
-    fun findAllImages(): LiveData<MutableList<Image>>? {
+    fun findAllImages(): List<Image>? {
         return imageRepo.findAllImages()
     }
 

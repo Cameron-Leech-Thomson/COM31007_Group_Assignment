@@ -60,7 +60,7 @@ class ImageRepository(application: Application) {
      * Find all images taken in the app
      * @return list of all images in the app
      */
-    fun findAllImages(): LiveData<MutableList<Image>>? {
+    fun findAllImages(): List<Image>? {
         return imageDao?.findAllImages()
     }
 }
