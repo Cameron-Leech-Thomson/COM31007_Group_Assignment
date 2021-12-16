@@ -84,7 +84,7 @@ class SensorsController constructor(private val mainActivity: MapsActivity,
         return arrayOf(temperature, pressure, humidity)
     }
 
-    private lateinit var latLng: LatLng
+    private var latLng: LatLng? = null
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun requestLocation() {
@@ -131,7 +131,7 @@ class SensorsController constructor(private val mainActivity: MapsActivity,
         return LatLng(lat, lng)
     }
 
-    fun getLatLng(): LatLng {
+    fun getLatLng(): LatLng? {
         return latLng
     }
 

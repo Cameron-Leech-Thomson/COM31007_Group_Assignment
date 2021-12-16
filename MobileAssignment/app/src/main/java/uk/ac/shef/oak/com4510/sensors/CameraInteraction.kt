@@ -2,6 +2,7 @@ package uk.ac.shef.oak.com4510.sensors
 
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import pl.aprilapps.easyphotopicker.*
@@ -50,6 +51,7 @@ class CameraInteraction constructor(private val mainActivity: MapsActivity) : Ap
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        Log.e("CameraInteraction","onActivityResult")
         easyImage.handleActivityResult(requestCode, resultCode,data,mainActivity,
             object: DefaultCallback() {
                 override fun onMediaFilesPicked(imageFiles: Array<MediaFile>, source: MediaSource) {

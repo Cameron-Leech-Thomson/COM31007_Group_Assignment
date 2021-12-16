@@ -1,7 +1,9 @@
 package uk.ac.shef.oak.com4510.model
 
+import android.graphics.Bitmap
 import androidx.room.*
 import androidx.room.ForeignKey.CASCADE
+import pl.aprilapps.easyphotopicker.MediaFile
 import java.util.Date
 
 @Entity(
@@ -18,7 +20,7 @@ data class Image(
     @ColumnInfo(name = "image_id")
     var image_id: Int,
 
-    @ColumnInfo(name = "uri")
+    @ColumnInfo(name = "imageUri")
     var imageUri: String,
 
     @ColumnInfo(name = "image_title")
@@ -36,6 +38,10 @@ data class Image(
     @ColumnInfo(name = "path_id")
     var path_id: Int,
 
-    ) {
+    @ColumnInfo(name = "thumbnailUri")
+    var thumbnailUri: String? = null,
 
+    ) {
+    @Ignore
+    var thumbnail: Bitmap? = null
 }

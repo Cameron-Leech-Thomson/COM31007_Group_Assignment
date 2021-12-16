@@ -1,5 +1,6 @@
 package uk.ac.shef.oak.com4510
 
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import uk.ac.shef.oak.com4510.databinding.ActivityMapsBinding
 import uk.ac.shef.oak.com4510.sensors.SensorsController
 import uk.ac.shef.oak.com4510.sensors.CameraInteraction
+import uk.ac.shef.oak.com4510.views.HomeFragment
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -47,6 +49,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
         binding.fabCamera.setOnClickListener(CameraListener(camera, sensorsController))
+        binding.fabStop.setOnClickListener{
+            val intent = Intent(this, HomeFragment::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onPause() {
