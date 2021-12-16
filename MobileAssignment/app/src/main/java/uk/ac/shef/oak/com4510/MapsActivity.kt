@@ -16,6 +16,7 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -25,11 +26,15 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import pl.aprilapps.easyphotopicker.*
 import uk.ac.shef.oak.com4510.databinding.ActivityMapsBinding
 import uk.ac.shef.oak.com4510.model.Image
 import uk.ac.shef.oak.com4510.sensors.ImageElement
 import uk.ac.shef.oak.com4510.sensors.SensorsController
+import uk.ac.shef.oak.com4510.viewmodels.ImageViewModel
 import uk.ac.shef.oak.com4510.views.GalleryFragment
 import uk.ac.shef.oak.com4510.views.HomeFragment
 import java.io.Serializable
@@ -53,9 +58,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
     private var pathID by Delegates.notNull<Int>()
     private var imagesInPath = 0
 
+    private lateinit var imageViewModel: ImageViewModel
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        imageViewModel = ViewModelProvider(this)[ImageViewModel::class.java]
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this@MapsActivity)
         sensorsController = SensorsController(this@MapsActivity, fusedLocationClient)
@@ -89,7 +98,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
         }
         binding.fabSubmit.setOnClickListener(View.OnClickListener {
             if (imagesInPath != 0) {
-                // TODO: Do something with pathImages.
+
+                for (image in pathImages) {
+                    GlobalScope.launch(Dispatchers.IO) {
+                        imageViewModel.insertImage(image)
+                    }
+                }
 
 //                val intent = Intent(this@MapsActivity, GalleryFragment::class.java)
 //                startActivity(intent)
@@ -122,8 +136,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
 
         val uri = image.getUri().toString()
         // Create image data class:
+
+        // DEBUG PRINT PATH ID
+        Log.d("path_id", pathID.toString())
+
+        //TODO CHANGE PATH ID FROM 1 TO THE PATH ID THAT COMES FROM THE HOME FRAGMENT
         val imageData = Image(0,uri,imageTitle,location.longitude,location.latitude,
-            getDate()!!, pathID, sensorData[0]!!, sensorData[1]!!, sensorData[2]!!)
+            getDate()!!, 1, sensorData[0]!!, sensorData[1]!!, sensorData[2]!!)
 
         pathImages.add(imageData)
     }

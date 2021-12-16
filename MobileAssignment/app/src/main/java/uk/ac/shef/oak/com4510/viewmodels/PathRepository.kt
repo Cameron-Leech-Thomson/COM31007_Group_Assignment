@@ -51,4 +51,8 @@ class PathRepository(application: Application) {
     fun getAllPaths(): LiveData<MutableList<Path>>? {
         return pathDao?.getAllPaths()
     }
+
+    fun getLastPath(): Int? {
+        return pathDao?.getLastPath()
+    }
 }

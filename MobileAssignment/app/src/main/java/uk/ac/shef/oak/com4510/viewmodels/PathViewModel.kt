@@ -16,4 +16,8 @@ class PathViewModel(application: Application) : AndroidViewModel(application) {
     fun getAllPaths(): LiveData<MutableList<Path>>? {
         return pathRepo.getAllPaths()
     }
+
+    fun getLastPath(): Int? {
+        return pathRepo.getLastPath()
+    }
 }
