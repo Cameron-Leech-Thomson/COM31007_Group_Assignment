@@ -39,7 +39,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var sensorsController: SensorsController
     private lateinit var easyImage: EasyImage
-    private val myDataset: MutableList<ImageElement> = ArrayList<ImageElement>()
+    private lateinit var image: ImageElement
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +68,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(intent)
         }
         binding.fabSubmit.setOnClickListener(View.OnClickListener {
-            Log.d("ImageFile", Uri.fromFile(myDataset.first().file!!.file).toString())
+
         })
     }
 
@@ -93,8 +93,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         sensorsController.requestLocation()
         sensorsController.startSensing()
 
-        // Check ImageFile has been created from camera.kt:
-        //if (camera)
+        if (::image.isInitialized){
+            Log.d("ImageFile","ImageFile exists:")
+            Log.d("ImageFile", Uri.fromFile(image.file!!.file).toString())
+        }
     }
 
     /**
@@ -121,7 +123,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         easyImage.handleActivityResult(requestCode, resultCode,data,this,
             object: DefaultCallback() {
                 override fun onMediaFilesPicked(imageFiles: Array<MediaFile>, source: MediaSource) {
-                    onPhotosReturned(imageFiles)
+                    image = getImageElements(imageFiles).first()
                 }
 
                 override fun onImagePickerError(error: Throwable, source: MediaSource) {
@@ -135,19 +137,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     /**
-     * add the selected images to the grid
-     * @param returnedPhotos
-     */
-    @SuppressLint("NotifyDataSetChanged")
-    private fun onPhotosReturned(returnedPhotos: Array<MediaFile>) {
-        myDataset.addAll(getImageElements(returnedPhotos))
-    }
-
-    /**
      * given a list of photos, it creates a list of ImageElements
      * we do not know how many elements we will have
      * @param returnedPhotos
-     * @return
+     * @return list of image elements
      */
     private fun getImageElements(returnedPhotos: Array<MediaFile>): List<ImageElement> {
         val imageElementList: MutableList<ImageElement> = ArrayList<ImageElement>()
