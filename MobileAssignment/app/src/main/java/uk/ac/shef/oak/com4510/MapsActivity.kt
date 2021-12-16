@@ -37,6 +37,7 @@ import uk.ac.shef.oak.com4510.sensors.SensorsController
 import uk.ac.shef.oak.com4510.viewmodels.ImageViewModel
 import uk.ac.shef.oak.com4510.views.GalleryFragment
 import uk.ac.shef.oak.com4510.views.HomeFragment
+import uk.ac.shef.oak.com4510.views.PathsFragment
 import java.io.Serializable
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -103,10 +104,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
                     GlobalScope.launch(Dispatchers.IO) {
                         imageViewModel.insertImage(image)
                     }
+
                 }
 
-//                val intent = Intent(this@MapsActivity, GalleryFragment::class.java)
-//                startActivity(intent)
+                val intent = Intent(this@MapsActivity, PathsFragment::class.java)
+                startActivity(intent)
 
             } else {
                 Snackbar.make(binding.root,
