@@ -30,9 +30,10 @@ import uk.ac.shef.oak.com4510.databinding.ActivityMapsBinding
 import uk.ac.shef.oak.com4510.sensors.ImageElement
 import uk.ac.shef.oak.com4510.sensors.SensorsController
 import uk.ac.shef.oak.com4510.views.HomeFragment
+import java.io.Serializable
 import java.util.ArrayList
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
@@ -40,6 +41,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var sensorsController: SensorsController
     private lateinit var easyImage: EasyImage
     private lateinit var image: ImageElement
+    private lateinit var previousUri: Uri
+    private lateinit var pathTitle: String
+    private var imagesInPath = 0
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,6 +74,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.fabSubmit.setOnClickListener(View.OnClickListener {
 
         })
+
+
+        pathTitle = intent.getSerializableExtra("path title") as String
+
+    }
+
+    /**
+     * pinImage()
+     * takes the image, as well as all the data relevant to it, and submit it to the database.
+     */
+    private fun pinImage(){
+        // Get Location:
+        val location = sensorsController.getLatLng()!!
+        // Add pin on map:
+        mMap.addMarker(MarkerOptions().position(location).title(pathTitle +
+                ": Image #" + imagesInPath.toString()))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(location))
     }
 
     private fun initEasyImage() {
@@ -93,9 +114,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         sensorsController.requestLocation()
         sensorsController.startSensing()
 
+        // Check if an image was taken when focus was lost:
         if (::image.isInitialized){
-            Log.d("ImageFile","ImageFile exists:")
-            Log.d("ImageFile", Uri.fromFile(image.file!!.file).toString())
+            // Check that the image is different from the previous:
+            val uri = Uri.fromFile(image.file!!.file)
+            if (uri != previousUri) {
+                // If so, pin image:
+                previousUri = uri
+                Log.d("ImageFile", "ImageFile exists:")
+                Log.d("ImageFile", uri.toString())
+                pinImage()
+            }
         }
     }
 
@@ -124,6 +153,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             object: DefaultCallback() {
                 override fun onMediaFilesPicked(imageFiles: Array<MediaFile>, source: MediaSource) {
                     image = getImageElements(imageFiles).first()
+                    imagesInPath += 1
                 }
 
                 override fun onImagePickerError(error: Throwable, source: MediaSource) {

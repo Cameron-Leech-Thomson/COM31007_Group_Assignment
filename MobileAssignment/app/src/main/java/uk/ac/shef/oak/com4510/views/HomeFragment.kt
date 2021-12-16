@@ -67,12 +67,14 @@ class HomeFragment: Fragment(), View.OnFocusChangeListener {
             if (title?.text.toString() == "") {
                 title?.setError("this field cant be blank")
             } else {
-                val path = Path(0, title?.text.toString(), date!!, "null", "null")
+                val titleText = title!!.text.toString()
+                val path = Path(0, titleText, date!!, "null", "null")
 
                 GlobalScope.launch(Dispatchers.IO) {
                     insertPath(pathViewModel!!, path)
                 }
                 val intent: Intent = Intent(activity, MapsActivity::class.java)
+                intent.putExtra("path title", titleText)
                 startActivity(intent)
             }
         })
