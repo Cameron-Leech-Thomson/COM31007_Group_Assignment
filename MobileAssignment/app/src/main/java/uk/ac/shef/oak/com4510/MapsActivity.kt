@@ -108,7 +108,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
         val thumbnailBitmap = ExifInterface(image.file!!.file).thumbnailBitmap
         // Create image data class:
         val imageData = Image(0,uri,imageTitle,location.longitude,location.latitude,
-            getDate()!!, pathID!!, thumbnailBitmap, sensorData[0]!!, sensorData[1]!!, sensorData[2]!!)
+            getDate()!!, pathID!!, sensorData[0]!!, sensorData[1]!!, sensorData[2]!!)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
