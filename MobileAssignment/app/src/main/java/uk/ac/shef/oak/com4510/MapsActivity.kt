@@ -118,6 +118,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
         if (::image.isInitialized){
             // Check that the image is different from the previous:
             val uri = image.getUri()!!
+            if (!(::previousUri.isInitialized)){
+                previousUri = uri
+                pinImage()
+            }
+            
             if (uri != previousUri) {
                 // If so, pin image:
                 previousUri = uri
