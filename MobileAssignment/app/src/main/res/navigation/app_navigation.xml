@@ -35,13 +35,13 @@
 <!--            android:id="@+id/action_navigation_gallery_to_imageFragment"-->
 <!--            app:destination="@id/imageFragment" />-->
     </fragment>
-<!--
+
     <fragment
         android:id="@+id/navigation_user"
-        android:name="uk.ac.shef.oak.com4510.views.User.UserFragment"
-        android:label="@string/title_user"
+        android:name="uk.ac.shef.oak.com4510.views.ProfileFragment"
+        android:label="@string/navbar_user_title"
         tools:layout="@layout/fragment_user" />
-
+<!--
     <fragment
         android:id="@+id/pathImageFragment"
         android:name="uk.ac.shef.oak.com4510.views.Path.PathImageFragment"
