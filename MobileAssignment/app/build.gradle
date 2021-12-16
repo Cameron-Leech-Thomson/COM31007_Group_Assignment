@@ -7,11 +7,7 @@ plugins {
 android {
     signingConfigs {
         debug {
-<<<<<<< HEAD
             storeFile file('C:\\Coding\\Android\\keyStore.jks')
-=======
-            storeFile file('/Users/mirceaegry/Documents/University/Year-3/mobiledev/project/COM31007_Group_Assignment/MobileAssignment/keyStore.jks')
->>>>>>> e45ac6e6a512ef2bf24d3ee38d535021986d6ad8
             storePassword 'com4510iscool'
             keyAlias 'com4510'
             keyPassword 'com4510iscool'
