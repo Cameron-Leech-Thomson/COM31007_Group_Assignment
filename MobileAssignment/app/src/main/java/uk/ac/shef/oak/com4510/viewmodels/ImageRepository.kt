@@ -52,7 +52,7 @@ class ImageRepository(application: Application) {
      * Find image by given id
      * @return image with the given id
      */
-    fun findImageByImageId(image_id: Int): LiveData<Image>? {
+    fun findImageByImageId(image_id: Int): List<Image>? {
         return imageDao?.findImageByImageId(image_id)
     }
 

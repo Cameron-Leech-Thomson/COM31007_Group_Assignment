@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -21,8 +22,9 @@ import java.lang.ref.Reference
 class PathsFragment : Fragment() {
 
     private var pathViewModel: PathViewModel? = null
-
+    private var recyclerView: RecyclerView? = null
     private var dataset: ArrayList<Path> = ArrayList()
+    private lateinit var pathAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private var textView: TextView? = null
 
@@ -53,6 +55,11 @@ class PathsFragment : Fragment() {
         GlobalScope.launch(Dispatchers.IO) {
             pathViewModel?.getAllPaths()?.let { dataset.addAll(it) }
         }
+
+        recyclerView = v.findViewById(R.id.recycler_view)
+        recyclerView?.layoutManager = GridLayoutManager(this.context, 1)
+        //pathAdapter = PathAdapter(dataset) as RecyclerView.Adapter<RecyclerView.ViewHolder>
+        recyclerView?.adapter = pathAdapter
 
         return v
     }

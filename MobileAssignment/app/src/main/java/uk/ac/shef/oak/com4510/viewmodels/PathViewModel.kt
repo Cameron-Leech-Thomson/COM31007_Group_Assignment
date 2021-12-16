@@ -13,7 +13,7 @@ class PathViewModel(application: Application) : AndroidViewModel(application) {
         pathRepo.insertPath(path)
     }
 
-    fun getAllPaths(): LiveData<MutableList<Path>>? {
+    fun getAllPaths(): List<Path>? {
         return pathRepo.getAllPaths()
     }
 

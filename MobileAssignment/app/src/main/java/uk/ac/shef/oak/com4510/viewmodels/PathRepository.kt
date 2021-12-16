@@ -48,8 +48,12 @@ class PathRepository(application: Application) {
      * Get all the paths created in the app
      * @return list of all paths
      */
-    fun getAllPaths(): LiveData<MutableList<Path>>? {
+    fun getAllPaths(): List<Path>? {
         return pathDao?.getAllPaths()
+    }
+
+    fun getPathByID(id: Int): List<Path>? {
+        return pathDao?.getPathByID(path_id = id)
     }
 
     fun getLastPath(): Int? {

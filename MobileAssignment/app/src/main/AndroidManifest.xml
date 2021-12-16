@@ -55,7 +55,7 @@
         </activity>
 
     <activity android:name=".MapsActivity" />
-
+    <activity android:name=".views.ShowImageActivity"/>
         <service
             android:name="uk.ac.shef.oak.com4510.sensors.LocationService"
             android:foregroundServiceType="location"/>

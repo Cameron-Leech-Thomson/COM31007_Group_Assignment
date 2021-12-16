@@ -1,22 +1,27 @@
 package uk.ac.shef.oak.com4510.views
 
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.ParcelFileDescriptor
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Gallery
 import android.widget.ImageView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import uk.ac.shef.oak.com4510.MainActivity
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.model.Image
+import uk.ac.shef.oak.com4510.viewmodels.ImageRepository
 
 class GalleryAdapter : RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
 
@@ -57,19 +62,12 @@ class GalleryAdapter : RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
         }
 
         // On click listener for every image in the gallery
-        /*
         holder.itemView.setOnClickListener(View.OnClickListener {
-            // val intent = Intent(context, ShowImageActivity::class.java)
-            // intent.putExtra("position", position)
-            // context.startActivity(intent)
-            val mainActivityContext = context as MainActivity
-            mainActivityContext.startForResult.launch(
-                Intent(context, ShowImageActivity::class.java).apply {
-                    putExtra("position", position)
-                }
-            )
-        })
-        */
+            val intent = Intent(context, ShowImageActivity::class.java)
+            Log.d("ImageData1", items[position].image_id.toString())
+            intent.putExtra("image id", items[position].image_id)
+            startActivity(context, intent, null)})
+
     }
 
     override fun getItemCount(): Int {

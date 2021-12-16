@@ -15,7 +15,7 @@ interface ImageDao {
     fun findImagesByPathId(path_id: Int): LiveData<MutableList<Image>>
 
     @Query("SELECT * FROM Image WHERE image_id = :image_id")
-    fun findImageByImageId(image_id: Int): LiveData<Image>
+    fun findImageByImageId(image_id: Int): List<Image>
 
     @Query("SELECT * FROM Image")
     fun findAllImages(): List<Image>
