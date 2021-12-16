@@ -1,5 +1,6 @@
 package uk.ac.shef.oak.com4510.views
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.viewmodels.ImageViewModel
+import java.lang.ref.Reference
 
 class PathsFragment : Fragment() {
 
@@ -35,34 +37,18 @@ class PathsFragment : Fragment() {
         imageViewModel = ViewModelProvider(this)[ImageViewModel::class.java]
 
         // Returns the value associated with the key title from Bundle.
-        title = requireArguments().getString("title")
+        title = resources.getString(R.string.pathTitle)
 
-        // Returns the value associated with the key path id from Bundle.
-        path_id = requireArguments().getString("path_id")!!.toInt()
-
-        textView = v.findViewById<TextView>(R.id.title)
+        textView = v.findViewById(R.id.textView2)
         // Sets the text to be displayed.
-        textView!!.setText(title)
+        textView!!.text = title
 
 
         /**
          * Find the target path according to the path id.
          * Adds the given observer to the observers list within the lifespan of the given owner.
          */
-        imageViewModel!!.findImagesByPathId(path_id)!!.observe(viewLifecycleOwner,
-            {
-//                recyclerView = v.findViewById(R.id.recycler_view)
-//
-//                // Initialize the PathDetailAdapter
-//                pathDetailAdapter = PathDetailAdapter(images, false)
 
-                // The number of columns in the grid.
-                val numberOfColumns = 4
-                // Set the GridLayoutManager that this RecyclerView will use.
-//                recyclerView.setLayoutManager(GridLayoutManager(context, numberOfColumns))
-//                // Set the path detail adapter to provide child views on demand.
-//                recyclerView.setAdapter(pathDetailAdapter)
-            })
         return v
     }
 }

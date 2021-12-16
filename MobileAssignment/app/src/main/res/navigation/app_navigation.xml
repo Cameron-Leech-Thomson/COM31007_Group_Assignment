@@ -46,7 +46,8 @@
         android:id="@+id/navigation_paths"
         android:name="uk.ac.shef.oak.com4510.views.PathsFragment"
         android:label="@string/navbar_paths_title"
-        tools:layout="@layout/fragment_path" />
+        tools:layout="@layout/fragment_path">
+    </fragment>
 <!--
     <fragment
         android:id="@+id/pathImageFragment"
