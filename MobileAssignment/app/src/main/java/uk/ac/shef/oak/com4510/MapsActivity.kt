@@ -70,7 +70,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
         mapFragment.getMapAsync(this@MapsActivity)
 
         binding.fabCamera.setOnClickListener(View.OnClickListener {
-            easyImage.openChooser(this@MapsActivity)
+            if (sensorsController.getLatLng() != null) {
+                easyImage.openChooser(this@MapsActivity)
+            }
         })
         binding.fabStop.setOnClickListener{
             val intent = Intent(this@MapsActivity, HomeFragment::class.java)
@@ -102,10 +104,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
         val sensorData = sensorsController.getSensorData()
 
         // Get PathID:
-        val pathID: Int? = null // Idk how to do this.
+        val pathID: Int? = 1 // Idk how to do this.
 
         val uri = image.getUri().toString()
-        val thumbnailBitmap = ExifInterface(image.file!!.file).thumbnailBitmap
         // Create image data class:
         val imageData = Image(0,uri,imageTitle,location.longitude,location.latitude,
             getDate()!!, pathID!!, sensorData[0]!!, sensorData[1]!!, sensorData[2]!!)
@@ -148,7 +149,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onResume() {
         super.onResume()
-        sensorsController.requestLocation()
         sensorsController.startSensing()
 
         // Check if an image was taken when focus was lost:
