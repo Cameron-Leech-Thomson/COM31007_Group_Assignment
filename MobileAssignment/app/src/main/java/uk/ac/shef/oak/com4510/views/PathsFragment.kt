@@ -7,10 +7,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.model.Image
 import uk.ac.shef.oak.com4510.model.Path
@@ -50,9 +46,9 @@ class PathsFragment : Fragment() {
         // Sets the text to be displayed.
         textView!!.text = title
 
-        GlobalScope.launch(Dispatchers.IO) {
-            pathViewModel?.getAllPaths()?.let { dataset.addAll(it) }
-        }
+//        GlobalScope.launch(Dispatchers.IO) {
+//            pathViewModel?.getAllPaths()?.let { dataset.addAll(it) }
+//        }
 
         return v
     }
