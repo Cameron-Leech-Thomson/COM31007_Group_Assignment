@@ -91,8 +91,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
             if (imagesInPath != 0) {
                 // TODO: Do something with pathImages.
 
-                val intent = Intent(this@MapsActivity, GalleryFragment::class.java)
-                startActivity(intent)
+//                val intent = Intent(this@MapsActivity, GalleryFragment::class.java)
+//                startActivity(intent)
             } else {
                 Snackbar.make(binding.root,
                     "Please upload some images to the path before submitting.",
