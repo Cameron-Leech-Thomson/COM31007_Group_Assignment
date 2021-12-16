@@ -1,15 +1,22 @@
 package uk.ac.shef.oak.com4510
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.ViewModelProvider
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -18,10 +25,12 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import pl.aprilapps.easyphotopicker.*
 import uk.ac.shef.oak.com4510.databinding.ActivityMapsBinding
+import uk.ac.shef.oak.com4510.sensors.ImageElement
 import uk.ac.shef.oak.com4510.sensors.SensorsController
-import uk.ac.shef.oak.com4510.sensors.CameraInteraction
 import uk.ac.shef.oak.com4510.views.HomeFragment
+import java.util.ArrayList
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -29,30 +38,48 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMapsBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var sensorsController: SensorsController
+    private lateinit var easyImage: EasyImage
+    private val myDataset: MutableList<ImageElement> = ArrayList<ImageElement>()
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        sensorsController = SensorsController(this, fusedLocationClient)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this@MapsActivity)
+        sensorsController = SensorsController(this@MapsActivity, fusedLocationClient)
         sensorsController.requestLocation()
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val camera = CameraInteraction(this)
+        checkPermissions(applicationContext)
+        initEasyImage()
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+        mapFragment.getMapAsync(this@MapsActivity)
 
-        binding.fabCamera.setOnClickListener(CameraListener(camera, sensorsController))
+        binding.fabCamera.setOnClickListener(View.OnClickListener {
+            easyImage.openChooser(this@MapsActivity)
+        })
         binding.fabStop.setOnClickListener{
-            val intent = Intent(this, HomeFragment::class.java)
+            val intent = Intent(this@MapsActivity, HomeFragment::class.java)
             startActivity(intent)
         }
+        binding.fabSubmit.setOnClickListener(View.OnClickListener {
+            Log.d("ImageFile", Uri.fromFile(myDataset.first().file!!.file).toString())
+        })
+    }
+
+    private fun initEasyImage() {
+        easyImage = EasyImage.Builder(this)
+            .setChooserTitle("Choose an Image")
+            .setFolderName("Maps Application")
+            .setChooserType(ChooserType.CAMERA_AND_GALLERY)
+            .allowMultiple(false)
+            .setCopyImagesToPublicGalleryFolder(true)
+            .build()
     }
 
     override fun onPause() {
@@ -88,18 +115,140 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        easyImage.handleActivityResult(requestCode, resultCode,data,this,
+            object: DefaultCallback() {
+                override fun onMediaFilesPicked(imageFiles: Array<MediaFile>, source: MediaSource) {
+                    onPhotosReturned(imageFiles)
+                }
+
+                override fun onImagePickerError(error: Throwable, source: MediaSource) {
+                    super.onImagePickerError(error, source)
+                }
+
+                override fun onCanceled(source: MediaSource) {
+                    super.onCanceled(source)
+                }
+            })
+    }
+
     /**
-     * OnClickListener instance specifically to run the Camera class when activated.
+     * add the selected images to the grid
+     * @param returnedPhotos
      */
-    inner class CameraListener(private val camera: CameraInteraction,
-                               private val sensors: SensorsController) : View.OnClickListener{
-        @RequiresApi(Build.VERSION_CODES.N)
-        override fun onClick(v: View?) {
-            camera.openCamera()
-            val sensorData = sensors.getSensorData()
-            Log.d("Sensor Data:",sensorData[0].toString()+","+sensorData[1].toString()+
-                    ","+sensorData[2].toString())
-            Log.d("LatLong",sensors.getLatLng().toString())
+    @SuppressLint("NotifyDataSetChanged")
+    private fun onPhotosReturned(returnedPhotos: Array<MediaFile>) {
+        myDataset.addAll(getImageElements(returnedPhotos))
+    }
+
+    /**
+     * given a list of photos, it creates a list of ImageElements
+     * we do not know how many elements we will have
+     * @param returnedPhotos
+     * @return
+     */
+    private fun getImageElements(returnedPhotos: Array<MediaFile>): List<ImageElement> {
+        val imageElementList: MutableList<ImageElement> = ArrayList<ImageElement>()
+        for (file in returnedPhotos) {
+            val element = ImageElement(file)
+            imageElementList.add(element)
         }
+        return imageElementList
+    }
+
+    /**
+     * check permissions are necessary starting from Android 6
+     * if you do not set the permissions, the activity will simply not work and you will be probably baffled for some hours
+     * until you find a note on StackOverflow
+     * @param context the calling context
+     */
+    private fun checkPermissions(context: Context) {
+        val currentAPIVersion = Build.VERSION.SDK_INT
+        if (currentAPIVersion >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                        this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    )
+                ) {
+                    val alertBuilder: AlertDialog.Builder =
+                        AlertDialog.Builder(context)
+                    alertBuilder.setCancelable(true)
+                    alertBuilder.setTitle("Permission necessary")
+                    alertBuilder.setMessage("External storage permission is necessary")
+                    alertBuilder.setPositiveButton(android.R.string.ok,
+                        DialogInterface.OnClickListener { _, _ ->
+                            ActivityCompat.requestPermissions(
+                                context as Activity, arrayOf(
+                                    Manifest.permission.READ_EXTERNAL_STORAGE
+                                ), MapsActivity.REQUEST_READ_EXTERNAL_STORAGE
+                            )
+                        })
+                    val alert: AlertDialog = alertBuilder.create()
+                    alert.show()
+                } else {
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                        MapsActivity.REQUEST_READ_EXTERNAL_STORAGE
+                    )
+                }
+            }
+            if (ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                        this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    )
+                ) {
+                    val alertBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
+                    alertBuilder.setCancelable(true)
+                    alertBuilder.setTitle("Permission necessary")
+                    alertBuilder.setMessage("Writing external storage permission is necessary")
+                    alertBuilder.setPositiveButton(android.R.string.ok,
+                        DialogInterface.OnClickListener { _, _ ->
+                            ActivityCompat.requestPermissions(
+                                context as Activity, arrayOf(
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                ), MapsActivity.REQUEST_WRITE_EXTERNAL_STORAGE
+                            )
+                        })
+                    val alert: AlertDialog = alertBuilder.create()
+                    alert.show()
+                } else {
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                        MapsActivity.REQUEST_WRITE_EXTERNAL_STORAGE
+                    )
+                }
+            }
+            if (ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.CAMERA
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.CAMERA),
+                    MapsActivity.REQUEST_CAMERA_CODE
+                );
+            }
+        }
+    }
+
+    companion object {
+        private val REQUEST_READ_EXTERNAL_STORAGE = 2987
+        private val REQUEST_WRITE_EXTERNAL_STORAGE = 7829
+        private val REQUEST_CAMERA_CODE = 100
     }
 }

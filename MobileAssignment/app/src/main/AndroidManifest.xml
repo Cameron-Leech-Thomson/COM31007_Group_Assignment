@@ -28,6 +28,8 @@
         android:theme="@style/Theme.MobileAssignment"
         android:requestLegacyExternalStorage="true">
 
+    <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -56,8 +58,7 @@
 
         <service
             android:name="uk.ac.shef.oak.com4510.sensors.LocationService"
-            android:foregroundServiceType="location"  >
-        </service>
+            android:foregroundServiceType="location"/>
 
     </application>
 

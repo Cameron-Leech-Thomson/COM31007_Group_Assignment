@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import uk.ac.shef.oak.com4510.MapsActivity
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.model.Path
