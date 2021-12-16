@@ -30,7 +30,7 @@ class ImageRepository(application: Application) {
         private class InsertAsyncTask(private val dao: ImageDao?) : ViewModel() {
             suspend fun insertInBackground(image: Image) {
                 scope.launch {
-                    val insertId: Int? = this@InsertAsyncTask.dao?.insertImage(image)?.toString()?.toInt()
+                    this@InsertAsyncTask.dao?.insertImage(image)?.toString()
                 }
             }
         }
