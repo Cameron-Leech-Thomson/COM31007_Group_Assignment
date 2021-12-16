@@ -24,16 +24,20 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.snackbar.Snackbar
 import pl.aprilapps.easyphotopicker.*
 import uk.ac.shef.oak.com4510.databinding.ActivityMapsBinding
 import uk.ac.shef.oak.com4510.model.Image
 import uk.ac.shef.oak.com4510.sensors.ImageElement
 import uk.ac.shef.oak.com4510.sensors.SensorsController
+import uk.ac.shef.oak.com4510.views.GalleryFragment
 import uk.ac.shef.oak.com4510.views.HomeFragment
 import java.io.Serializable
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.properties.Delegates
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
 
@@ -45,6 +49,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
     private lateinit var image: ImageElement
     private lateinit var previousUri: Uri
     private lateinit var pathTitle: String
+    private var pathImages = ArrayList<Image>()
+    private var pathID by Delegates.notNull<Int>()
     private var imagesInPath = 0
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -76,12 +82,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
             startActivity(intent)
         }
         binding.fabSubmit.setOnClickListener(View.OnClickListener {
+            if (imagesInPath != 0) {
+                // TODO: Do something with pathImages.
 
+                val intent = Intent(this@MapsActivity, GalleryFragment::class.java)
+                startActivity(intent)
+            } else {
+                Snackbar.make(binding.root,
+                    "Please upload some images to the path before submitting.",
+                    Snackbar.LENGTH_SHORT).show()
+            }
         })
 
-
         pathTitle = intent.getSerializableExtra("path title") as String
-
+        pathID = intent.getSerializableExtra("path id") as Int
     }
 
     /**
@@ -100,13 +114,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
         // Get sensor data:
         val sensorData = sensorsController.getSensorData()
 
-        // Get PathID:
-        val pathID: Int? = 1 // Idk how to do this.
-
         val uri = image.getUri().toString()
         // Create image data class:
         val imageData = Image(0,uri,imageTitle,location.longitude,location.latitude,
-            getDate()!!, pathID!!, sensorData[0]!!, sensorData[1]!!, sensorData[2]!!)
+            getDate()!!, pathID, sensorData[0]!!, sensorData[1]!!, sensorData[2]!!)
+
+        pathImages.add(imageData)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

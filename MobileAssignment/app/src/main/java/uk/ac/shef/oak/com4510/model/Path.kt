@@ -6,7 +6,7 @@ import java.util.*
 @Entity
 data class Path(
     @PrimaryKey(autoGenerate = true)
-    var path_id: Long,
+    var path_id: Int,
 
     @ColumnInfo(name = "path_title")
     var title: String,

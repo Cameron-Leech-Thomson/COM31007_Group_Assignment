@@ -75,6 +75,7 @@ class HomeFragment: Fragment(), View.OnFocusChangeListener {
                 }
                 val intent: Intent = Intent(activity, MapsActivity::class.java)
                 intent.putExtra("path title", titleText)
+                intent.putExtra("path id", path.path_id)
                 startActivity(intent)
             }
         })
