@@ -68,7 +68,7 @@ class HomeFragment: Fragment(), View.OnFocusChangeListener {
                 title?.setError("this field cant be blank")
             } else {
                 val titleText = title!!.text.toString()
-                val path = Path(0, titleText, date!!, "null", "null")
+                val path = Path(0, titleText, date!!)
 
                 GlobalScope.launch(Dispatchers.IO) {
                     insertPath(pathViewModel!!, path)

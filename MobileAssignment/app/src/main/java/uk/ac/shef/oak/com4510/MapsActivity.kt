@@ -64,6 +64,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        Snackbar.make(binding.root,
+            "Loading, please wait.", Snackbar.LENGTH_LONG).show()
+
         checkPermissions(applicationContext)
         initEasyImage()
 
@@ -75,6 +78,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
         binding.fabCamera.setOnClickListener(View.OnClickListener {
             if (sensorsController.getLatLng() != null) {
                 easyImage.openChooser(this@MapsActivity)
+            } else{
+                Snackbar.make(binding.root,
+                    "Loading, please wait.", Snackbar.LENGTH_SHORT).show()
             }
         })
         binding.fabStop.setOnClickListener{

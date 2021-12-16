@@ -14,12 +14,6 @@ data class Path(
     @ColumnInfo(name = "path_date")
     var time: Date,
 
-    @ColumnInfo(name = "pressure")
-    var pressure: String,
-
-    @ColumnInfo(name = "temperature")
-    var temperature: String,
-
 
     ){
 
