@@ -38,10 +38,19 @@ data class Image(
     @ColumnInfo(name = "path_id")
     var path_id: Int,
 
-    @ColumnInfo(name = "thumbnailUri")
-    var thumbnailUri: String? = null,
+    @ColumnInfo(name = "thumbnailBitmap")
+    var thumbnail: Bitmap? = null,
+
+    @ColumnInfo(name = "temperature")
+    var temperature: Float,
+
+    @ColumnInfo(name = "pressure")
+    var pressure: Float,
+
+    @ColumnInfo(name = "humidity")
+    var humidity: Float,
 
     ) {
     @Ignore
-    var thumbnail: Bitmap? = null
+    var thumbnailUri: String? = null
 }

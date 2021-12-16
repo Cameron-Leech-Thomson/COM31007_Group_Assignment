@@ -8,10 +8,12 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
@@ -27,11 +29,14 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import pl.aprilapps.easyphotopicker.*
 import uk.ac.shef.oak.com4510.databinding.ActivityMapsBinding
+import uk.ac.shef.oak.com4510.model.Image
 import uk.ac.shef.oak.com4510.sensors.ImageElement
 import uk.ac.shef.oak.com4510.sensors.SensorsController
 import uk.ac.shef.oak.com4510.views.HomeFragment
 import java.io.Serializable
-import java.util.ArrayList
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
 
@@ -84,13 +89,45 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
      * pinImage()
      * takes the image, as well as all the data relevant to it, and submit it to the database.
      */
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun pinImage(){
         // Get Location:
         val location = sensorsController.getLatLng()!!
+        val imageTitle = "$pathTitle: Image #$imagesInPath"
         // Add pin on map:
-        mMap.addMarker(MarkerOptions().position(location).title(pathTitle +
-                ": Image #" + imagesInPath.toString()))
+        mMap.addMarker(MarkerOptions().position(location).title(imageTitle))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(location))
+
+        // Get sensor data:
+        val sensorData = sensorsController.getSensorData()
+
+        // Get PathID:
+        val pathID: Int? = null // Idk how to do this.
+
+        val uri = image.getUri().toString()
+        val thumbnailBitmap = ExifInterface(image.file!!.file).thumbnailBitmap
+        // Create image data class:
+        val imageData = Image(0,uri,imageTitle,location.longitude,location.latitude,
+            getDate()!!, pathID!!, thumbnailBitmap, sensorData[0]!!, sensorData[1]!!, sensorData[2]!!)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun getDate(): Date?{
+        val config = applicationContext.resources.configuration
+        val locale = config!!.locales[0]
+
+        val dateFormat: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", locale)
+
+        var date: Date? = null
+
+        try {
+            date = dateFormat.parse(dateFormat.format(Calendar.getInstance().time))
+
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+
+        return date
     }
 
     private fun initEasyImage() {
@@ -108,7 +145,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
         sensorsController.stopSensing()
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onResume() {
         super.onResume()
         sensorsController.requestLocation()
@@ -122,7 +159,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
                 previousUri = uri
                 pinImage()
             }
-            
+
             if (uri != previousUri) {
                 // If so, pin image:
                 previousUri = uri
