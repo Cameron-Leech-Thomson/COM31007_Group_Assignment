@@ -41,6 +41,12 @@
         android:name="uk.ac.shef.oak.com4510.views.ProfileFragment"
         android:label="@string/navbar_user_title"
         tools:layout="@layout/fragment_user" />
+
+    <fragment
+        android:id="@+id/navigation_paths"
+        android:name="uk.ac.shef.oak.com4510.views.PathsFragment"
+        android:label="@string/navbar_paths_title"
+        tools:layout="@layout/fragment_path" />
 <!--
     <fragment
         android:id="@+id/pathImageFragment"
