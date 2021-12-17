@@ -11,7 +11,7 @@ public interface PathDao {
     @Query("SELECT * FROM Path")
     fun getAllPaths(): List<Path>
 
-    @Query("SELECT path_id FROM Path ORDER BY path_id LIMIT 1")
+    @Query("SELECT path_id FROM Path ORDER BY path_id DESC LIMIT 1")
     fun getLastPath(): Int
 
     @Query("SELECT * FROM Path WHERE path_id = :path_id")

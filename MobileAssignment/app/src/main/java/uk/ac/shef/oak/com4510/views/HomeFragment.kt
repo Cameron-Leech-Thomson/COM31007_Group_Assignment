@@ -3,6 +3,7 @@ package uk.ac.shef.oak.com4510.views
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -69,13 +70,15 @@ class HomeFragment: Fragment(), View.OnFocusChangeListener {
             } else {
                 val titleText = title!!.text.toString()
                 val path = Path(0, titleText, date!!)
+                var path_id: Int
 
                 GlobalScope.launch(Dispatchers.IO) {
                     insertPath(pathViewModel!!, path)
+                    path_id = pathViewModel?.getLastPath()!!
 
                     val intent: Intent = Intent(activity, MapsActivity::class.java)
                     intent.putExtra("path title", titleText)
-                    intent.putExtra("path id", path.path_id)
+                    intent.putExtra("path id", path_id)
                     startActivity(intent)
                 }
             }
