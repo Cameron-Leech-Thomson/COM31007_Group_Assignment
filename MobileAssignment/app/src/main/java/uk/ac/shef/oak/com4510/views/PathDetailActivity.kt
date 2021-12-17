@@ -1,8 +1,11 @@
 package uk.ac.shef.oak.com4510.views
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
+import android.widget.FrameLayout
 import android.widget.ImageView
 
 import androidx.appcompat.app.AppCompatActivity
@@ -12,9 +15,12 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import uk.ac.shef.oak.com4510.MainActivity
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.model.Image
 import uk.ac.shef.oak.com4510.viewmodels.ImageViewModel
@@ -34,9 +40,9 @@ class PathDetailActivity : AppCompatActivity(), Serializable {
 
         var numberOfColumns: Int = 4
 
-        initData(pathID)
-
         imageViewModel = ViewModelProvider(this)[ImageViewModel::class.java]
+
+        initData(pathID)
 
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView?.layoutManager =  GridLayoutManager(this, numberOfColumns)
@@ -44,10 +50,25 @@ class PathDetailActivity : AppCompatActivity(), Serializable {
         pathDetailAdapter = PathDetailAdapter(dataset) as Adapter<RecyclerView.ViewHolder>
 
         recyclerView?.adapter = pathDetailAdapter
+
+        val backButton = findViewById<FloatingActionButton>(R.id.fab_path_back)
+        backButton.setOnClickListener {
+            val intent = Intent(this@PathDetailActivity, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        if (dataset.size == 0){
+            val snackbar = Snackbar.make(findViewById(R.id.activity_path_layout),
+                "Sorry, there are no images available for this path.",
+                Snackbar.LENGTH_INDEFINITE)
+            val params = snackbar.view.layoutParams as FrameLayout.LayoutParams
+            params.gravity = Gravity.TOP
+            snackbar.view.layoutParams = params
+            snackbar.show()
+        }
     }
 
     private fun initData(path_id: Int) {
-        Log.d("path_id", path_id.toString())
         GlobalScope.launch(Dispatchers.IO) {
             imageViewModel?.findImagesByPathId(path_id)?.let { dataset.addAll(it) }
         }

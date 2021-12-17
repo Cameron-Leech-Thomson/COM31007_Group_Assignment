@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -56,17 +57,12 @@ class PathDetailAdapter : RecyclerView.Adapter<PathDetailAdapter.ViewHolder>{
             }
         }
 
-//        holder.itemView.setOnClickListener(View.OnClickListener {
-//            // val intent = Intent(context, ShowImageActivity::class.java)
-//            // intent.putExtra("position", position)
-//             context.startActivity(intent)
-//            val mainActivityContext = context as PathDetailActivity
-//            mainActivityContext.startForResult.launch(
-//                Intent(context, ShowImageActivity::class.java).apply {
-//                    putExtra("position", position)
-//                }
-//            )
-//        })
+        // On click listener for every image in the gallery
+        holder.itemView.setOnClickListener(View.OnClickListener {
+            val intent = Intent(context, ShowImageActivity::class.java)
+            intent.putExtra("image id", items[position].image_id)
+            ContextCompat.startActivity(context, intent, null)
+        })
     }
 
     override fun getItemCount(): Int {
