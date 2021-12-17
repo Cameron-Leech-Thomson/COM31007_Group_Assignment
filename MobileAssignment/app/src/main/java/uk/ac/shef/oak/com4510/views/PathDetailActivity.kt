@@ -2,8 +2,12 @@ package uk.ac.shef.oak.com4510.views
 
 import android.app.Activity
 import android.os.Bundle
+import android.widget.ImageView
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
@@ -18,7 +22,7 @@ import java.io.Serializable
 class PathDetailActivity : Activity(), Serializable {
 
     private var imageViewModel: ImageViewModel? = null
-    private lateinit var pathDetailAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>
+    private lateinit var pathDetailAdapter: Adapter<RecyclerView.ViewHolder>
     private var recyclerView: RecyclerView? = null
     private var dataset: ArrayList<Image> = ArrayList()
 
@@ -31,7 +35,10 @@ class PathDetailActivity : Activity(), Serializable {
 
         initData(pathID)
 
-        recyclerView = findViewById(R.id.grid_recycler_view)
+        //TODO THIS IS THE ERROR - uncomment
+        //imageViewModel = ViewModelProvider(this)[ImageViewModel::class.java]
+
+        recyclerView = findViewById(R.id.recycler_view)
         recyclerView?.layoutManager =  GridLayoutManager(this, numberOfColumns)
 
         pathDetailAdapter = PathDetailAdapter(dataset) as Adapter<RecyclerView.ViewHolder>
@@ -41,10 +48,9 @@ class PathDetailActivity : Activity(), Serializable {
 
     private fun initData(path_id: Int) {
         GlobalScope.launch(Dispatchers.IO) {
-            imageViewModel?.findImagesByPathId(path_id)?.let { dataset.addAll(it) }
+            imageViewModel?.findAllImages()?.let { dataset.addAll(it) }
         }
     }
-
 
 
 }

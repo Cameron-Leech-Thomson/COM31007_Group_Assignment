@@ -47,18 +47,6 @@ class GalleryFragment: Fragment() {
 
         val v: View = inflater.inflate(R.layout.fragment_gallery, container, false)
 
-        val config = this.context?.resources?.configuration
-        val locale = config!!.locales[0]
-        var date: Date? = null
-
-        val dateFormat: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", locale)
-
-        try {
-            date = dateFormat.parse(dateFormat.format(Calendar.getInstance().time))
-
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
 
         imageViewModel = ViewModelProvider(this)[ImageViewModel::class.java]
 
