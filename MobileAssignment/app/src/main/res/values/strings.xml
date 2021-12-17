@@ -4,7 +4,7 @@
     <string name="navbar_home_title">Home</string>
     <string name="navbar_paths_title">Paths</string>
     <string name="navbar_gallery_title">Gallery</string>
-    <string name="navbar_user_title">User</string>
+    <string name="navbar_user_title">Profile</string>
 
     <string name="newVisit">-New Journey-</string>
     <string name="Title">Name Your Visit</string>
@@ -20,7 +20,7 @@
     <string name="pathTitle">Your Paths</string>
     <string name="pathToImagePath">pathToImagePath</string>
     <string name="title">Title</string>
-    <string name="User">User</string>
+    <string name="User">Username</string>
     <string name="Gallery">Gallery</string>
     <string name="image_details_header">Details</string>
 </resources>
