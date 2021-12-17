@@ -13,10 +13,10 @@
         app:layout_constraintGuide_percent="0.1" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/pathsTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/Paths"
+        android:text="@string/pathTitle"
         android:textColor="@color/Path"
         android:textSize="32sp"
         app:layout_constraintBottom_toTopOf="@+id/recycler_view"
