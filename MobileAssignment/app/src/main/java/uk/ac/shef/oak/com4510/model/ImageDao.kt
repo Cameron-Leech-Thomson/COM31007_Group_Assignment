@@ -12,7 +12,7 @@ import androidx.room.TypeConverters
 interface ImageDao {
 
     @Query("SELECT * FROM Image WHERE path_id = :path_id")
-    fun findImagesByPathId(path_id: Int): LiveData<MutableList<Image>>
+    fun findImagesByPathId(path_id: Int): List<Image>
 
     @Query("SELECT * FROM Image WHERE image_id = :image_id")
     fun findImageByImageId(image_id: Int): List<Image>

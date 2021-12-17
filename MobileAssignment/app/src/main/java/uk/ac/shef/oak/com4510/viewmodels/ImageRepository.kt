@@ -44,7 +44,7 @@ class ImageRepository(application: Application) {
      * Find all the images that have the same path
      * @return list containing all the path images
      */
-    fun findImagesByPathId(path_id: Int): LiveData<MutableList<Image>>? {
+    fun findImagesByPathId(path_id: Int): List<Image>? {
         return imageDao?.findImagesByPathId(path_id)
     }
 

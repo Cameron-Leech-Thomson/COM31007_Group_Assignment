@@ -12,7 +12,7 @@ class ImageViewModel(application: Application) : AndroidViewModel(application) {
         return imageRepo.findAllImages()
     }
 
-    fun findImagesByPathId(path_id: Int): LiveData<MutableList<Image>>? {
+    fun findImagesByPathId(path_id: Int): List<Image>? {
         return imageRepo.findImagesByPathId(path_id)
     }
 
