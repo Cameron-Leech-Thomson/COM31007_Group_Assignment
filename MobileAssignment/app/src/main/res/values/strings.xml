@@ -7,7 +7,7 @@
     <string name="navbar_user_title">User</string>
 
     <string name="newVisit">-New Journey-</string>
-    <string name="Title">Title of your Visit</string>
+    <string name="Title">Name Your Visit</string>
     <string name="insertTitle">Insert a title</string>
     <string name="titleDetail">Current Date and Time is automatically fills.</string>
     <string name="Start">Start Journey</string>
