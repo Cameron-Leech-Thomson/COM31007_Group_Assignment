@@ -25,8 +25,6 @@ class ShowImageActivity : Activity(), Serializable {
         val imageRepo = ImageRepository(this.application)
         val pathRepository = PathRepository(this.application)
 
-        Log.d("ImageData", imageID.toString())
-
         lateinit var selectedImage: Image
         lateinit var imagePath: Path
 

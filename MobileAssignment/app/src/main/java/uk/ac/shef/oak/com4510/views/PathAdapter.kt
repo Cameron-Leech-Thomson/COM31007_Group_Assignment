@@ -7,18 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.LiveData
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
-import org.w3c.dom.Text
-import java.text.SimpleDateFormat
-import java.util.Date
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.model.Path
-import uk.ac.shef.oak.com4510.views.GalleryAdapter
 
 
 class PathAdapter : RecyclerView.Adapter<PathAdapter.ViewHolder>() {
@@ -63,5 +54,6 @@ class PathAdapter : RecyclerView.Adapter<PathAdapter.ViewHolder>() {
 
     companion object {
         lateinit var items: MutableList<Path>
+
     }
 }

@@ -64,7 +64,6 @@ class GalleryAdapter : RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
         // On click listener for every image in the gallery
         holder.itemView.setOnClickListener(View.OnClickListener {
             val intent = Intent(context, ShowImageActivity::class.java)
-            Log.d("ImageData1", items[position].image_id.toString())
             intent.putExtra("image id", items[position].image_id)
             startActivity(context, intent, null)})
 
