@@ -58,11 +58,6 @@ class ShowImageActivity : Activity(), Serializable {
         val humid = selectedImage.humidity
 
         imageView.setImageURI(Uri.parse(uri))
-
-        val backButton = findViewById<FloatingActionButton?>(R.id.fab_back)
-        backButton.setOnClickListener {
-            Log.d("ShowImage", "BackButton")
-        }
     }
 
 }
