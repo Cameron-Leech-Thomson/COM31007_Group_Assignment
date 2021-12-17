@@ -141,12 +141,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Serializable {
 
         // Create image data class:
 
-        // DEBUG PRINT PATH ID
-        Log.d("path_id", pathID.toString())
-
-        //TODO CHANGE PATH ID FROM 1 TO THE PATH ID THAT COMES FROM THE HOME FRAGMENT
         val imageData = Image(0,uri,imageTitle,location.longitude,location.latitude,
-            getDate()!!, 1, sensorData[0]!!, sensorData[1]!!, sensorData[2]!!)
+            getDate()!!, pathID, sensorData[0]!!, sensorData[1]!!, sensorData[2]!!)
 
         pathImages.add(imageData)
     }

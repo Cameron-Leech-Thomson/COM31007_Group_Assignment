@@ -70,15 +70,16 @@ class HomeFragment: Fragment(), View.OnFocusChangeListener {
             } else {
                 val titleText = title!!.text.toString()
                 val path = Path(0, titleText, date!!)
-                var path_id: Int
+                var pathId: Int
 
                 GlobalScope.launch(Dispatchers.IO) {
                     insertPath(pathViewModel!!, path)
-                    path_id = pathViewModel?.getLastPath()!!
+                    pathId = pathViewModel?.getLastPath()!!
+                    Log.d("lat_path", pathId.toString())
 
                     val intent: Intent = Intent(activity, MapsActivity::class.java)
                     intent.putExtra("path title", titleText)
-                    intent.putExtra("path id", path_id)
+                    intent.putExtra("path id", pathId)
                     startActivity(intent)
                 }
             }
