@@ -56,7 +56,7 @@ class ShowImageActivity : Activity(), Serializable {
         val path = "Journey: " + imagePath.title
         val longitude = "Longitude: " + selectedImage.longitude.toString()
         val latitude = "Latitude: " + selectedImage.latitude.toString()
-        val date = "Date: " + selectedImage.time.toString()
+        val date = selectedImage.time.toString()
         val temp = "Ambient Temperature: " + selectedImage.temperature.toString()
         val press = "Atmospheric Pressure: " + selectedImage.pressure.toString()
         val humid = "Relative Humidity: " + selectedImage.humidity.toString()

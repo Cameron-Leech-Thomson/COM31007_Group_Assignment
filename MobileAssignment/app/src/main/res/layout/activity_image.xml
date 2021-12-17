@@ -33,7 +33,7 @@
         android:paddingBottom="40dp">
 
         <TextView
-            android:id="@+id/image_detail_pathName"
+            android:id="@+id/image_detail_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
@@ -42,7 +42,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/image_detail_date"
+            android:id="@+id/image_detail_pathName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
