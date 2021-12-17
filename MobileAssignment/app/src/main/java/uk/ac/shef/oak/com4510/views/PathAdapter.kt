@@ -12,15 +12,15 @@ import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.model.Path
 
 
-class PathAdapter : RecyclerView.Adapter<PathAdapter.ViewHolder>() {
+class PathAdapter() : RecyclerView.Adapter<PathAdapter.ViewHolder>() {
 
     private lateinit var context: Context
 
-    constructor(items: List<Path>) : super() {
+    constructor(items: List<Path>) : this() {
         PathAdapter.items = items as MutableList<Path>
     }
 
-    constructor(cont: Context, items: List<Path>) : super() {
+    constructor(cont: Context, items: List<Path>) : this() {
         PathAdapter.items = items as MutableList<Path>
         context = cont
     }
