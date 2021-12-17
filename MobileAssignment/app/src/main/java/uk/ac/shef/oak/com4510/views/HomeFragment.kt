@@ -72,12 +72,12 @@ class HomeFragment: Fragment(), View.OnFocusChangeListener {
 
                 GlobalScope.launch(Dispatchers.IO) {
                     insertPath(pathViewModel!!, path)
-                }
 
-                val intent: Intent = Intent(activity, MapsActivity::class.java)
-                intent.putExtra("path title", titleText)
-                intent.putExtra("path id", path.path_id)
-                startActivity(intent)
+                    val intent: Intent = Intent(activity, MapsActivity::class.java)
+                    intent.putExtra("path title", titleText)
+                    intent.putExtra("path id", path.path_id)
+                    startActivity(intent)
+                }
             }
         })
     }
