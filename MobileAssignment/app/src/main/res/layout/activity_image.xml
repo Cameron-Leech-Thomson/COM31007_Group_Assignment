@@ -26,11 +26,22 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="242dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
         android:orientation="vertical"
         android:padding="10dp"
         android:paddingBottom="40dp">
+
+        <TextView
+            android:id="@+id/image_detail_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/image_details_header"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/image_detail_date"
