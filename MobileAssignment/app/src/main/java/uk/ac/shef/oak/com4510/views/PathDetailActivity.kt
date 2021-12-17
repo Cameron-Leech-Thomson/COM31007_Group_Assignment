@@ -56,21 +56,21 @@ class PathDetailActivity : AppCompatActivity(), Serializable {
             val intent = Intent(this@PathDetailActivity, MainActivity::class.java)
             startActivity(intent)
         }
-
-        if (dataset.size == 0){
-            val snackbar = Snackbar.make(findViewById(R.id.activity_path_layout),
-                "Sorry, there are no images available for this path.",
-                Snackbar.LENGTH_INDEFINITE)
-            val params = snackbar.view.layoutParams as FrameLayout.LayoutParams
-            params.gravity = Gravity.TOP
-            snackbar.view.layoutParams = params
-            snackbar.show()
-        }
     }
 
     private fun initData(path_id: Int) {
         GlobalScope.launch(Dispatchers.IO) {
             imageViewModel?.findImagesByPathId(path_id)?.let { dataset.addAll(it) }
+
+            if (dataset.size == 0){
+                val snackbar = Snackbar.make(findViewById(R.id.activity_path_layout),
+                    "Sorry, there are no images available for this path.",
+                    Snackbar.LENGTH_INDEFINITE)
+                val params = snackbar.view.layoutParams as FrameLayout.LayoutParams
+                params.gravity = Gravity.TOP
+                snackbar.view.layoutParams = params
+                snackbar.show()
+            }
         }
     }
 

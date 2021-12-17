@@ -53,17 +53,6 @@ class PathAdapter() : RecyclerView.Adapter<PathAdapter.ViewHolder>() {
         //Use the provided View Holder on the onCreateViewHolder method to populate the
         // current row on the RecyclerView
         holder.title.text = items[position].title
-        val path_id = items[position].path_id
-        val repo = ImageRepository(holder.itemView.context.applicationContext as Application)
-        runBlocking {
-            GlobalScope.launch(Dispatchers.IO) {
-                val images = repo.findImagesByPathId(path_id)
-                if (!images.isNullOrEmpty()) {
-                    val uri = Uri.parse(images.first().imageUri)
-                    holder.image.setImageURI(uri)
-                }
-            }.join()
-        }
 
         holder.itemView.setOnClickListener{
             val intent = Intent(context, PathDetailActivity::class.java)
@@ -78,7 +67,6 @@ class PathAdapter() : RecyclerView.Adapter<PathAdapter.ViewHolder>() {
 
     class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var title: TextView = itemView.findViewById<View>(R.id.text1) as TextView
-        var image: ImageView = itemView.findViewById(R.id.imagePreview1) as ImageView
     }
 
     companion object {
