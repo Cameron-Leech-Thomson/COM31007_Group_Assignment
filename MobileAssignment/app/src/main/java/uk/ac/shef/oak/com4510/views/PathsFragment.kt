@@ -17,6 +17,7 @@ import uk.ac.shef.oak.com4510.model.Image
 import uk.ac.shef.oak.com4510.model.Path
 import uk.ac.shef.oak.com4510.viewmodels.ImageViewModel
 import uk.ac.shef.oak.com4510.viewmodels.PathViewModel
+import uk.ac.shef.oak.com4510.views.Path.PathAdapter
 import java.lang.ref.Reference
 
 class PathsFragment : Fragment() {
@@ -58,8 +59,8 @@ class PathsFragment : Fragment() {
 
         recyclerView = v.findViewById(R.id.recycler_view)
         recyclerView?.layoutManager = GridLayoutManager(this.context, 1)
-        //pathAdapter = PathAdapter(dataset) as RecyclerView.Adapter<RecyclerView.ViewHolder>
-//        recyclerView?.adapter = pathAdapter
+        pathAdapter = PathAdapter(dataset) as RecyclerView.Adapter<RecyclerView.ViewHolder>
+        recyclerView?.adapter = pathAdapter
 
         return v
     }

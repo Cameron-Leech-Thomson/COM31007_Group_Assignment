@@ -40,7 +40,7 @@ class PathAdapter() : RecyclerView.Adapter<PathAdapter.ViewHolder>() {
         //Use the provided View Holder on the onCreateViewHolder method to populate the
         // current row on the RecyclerView
         if (items[position] != null) {
-            //holder.title.text = items[position].title
+            holder.title.text = items[position].title
         }
     }
 
@@ -49,7 +49,7 @@ class PathAdapter() : RecyclerView.Adapter<PathAdapter.ViewHolder>() {
     }
 
     class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        //var title: TextView = itemView.findViewById<View>(R.id.textView2) as TextView
+        var title: TextView = itemView.findViewById<View>(R.id.text1) as TextView
     }
 
     companion object {
