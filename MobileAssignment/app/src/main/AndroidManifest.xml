@@ -44,7 +44,7 @@
 
 
     <activity
-            android:name=".MainActivity"
+            android:name=".views.PathDetailActivity"
             android:exported="true"
             android:label="@string/title_activity_maps">
             <intent-filter>
