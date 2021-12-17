@@ -2,6 +2,7 @@ package uk.ac.shef.oak.com4510.views.Path
 
 import android.app.Application
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -20,6 +22,7 @@ import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.model.Image
 import uk.ac.shef.oak.com4510.model.Path
 import uk.ac.shef.oak.com4510.viewmodels.ImageRepository
+import uk.ac.shef.oak.com4510.views.PathDetailActivity
 
 
 class PathAdapter() : RecyclerView.Adapter<PathAdapter.ViewHolder>() {
@@ -49,19 +52,23 @@ class PathAdapter() : RecyclerView.Adapter<PathAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         //Use the provided View Holder on the onCreateViewHolder method to populate the
         // current row on the RecyclerView
-        if (items[position] != null) {
-            holder.title.text = items[position].title
-            val path_id = items[position].path_id
-            val repo = ImageRepository(holder.itemView.context.applicationContext as Application)
-            runBlocking {
-                GlobalScope.launch(Dispatchers.IO) {
-                    val images = repo.findImagesByPathId(path_id)
-                    if (!images.isNullOrEmpty()) {
-                        val uri = Uri.parse(images.first().imageUri)
-                        holder.image.setImageURI(uri)
-                    }
-                }.join()
-            }
+        holder.title.text = items[position].title
+        val path_id = items[position].path_id
+        val repo = ImageRepository(holder.itemView.context.applicationContext as Application)
+        runBlocking {
+            GlobalScope.launch(Dispatchers.IO) {
+                val images = repo.findImagesByPathId(path_id)
+                if (!images.isNullOrEmpty()) {
+                    val uri = Uri.parse(images.first().imageUri)
+                    holder.image.setImageURI(uri)
+                }
+            }.join()
+        }
+
+        holder.itemView.setOnClickListener{
+            val intent = Intent(context, PathDetailActivity::class.java)
+            intent.putExtra("path id", items[position].path_id)
+            startActivity(context, intent, null)
         }
     }
 

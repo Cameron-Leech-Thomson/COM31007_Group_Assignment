@@ -44,7 +44,7 @@
 
 
     <activity
-            android:name=".views.PathDetailActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:label="@string/title_activity_maps">
             <intent-filter>
@@ -56,6 +56,7 @@
 
     <activity android:name=".MapsActivity" />
     <activity android:name=".views.ShowImageActivity"/>
+    <activity android:name=".views.PathDetailActivity"/>
         <service
             android:name="uk.ac.shef.oak.com4510.sensors.LocationService"
             android:foregroundServiceType="location"/>

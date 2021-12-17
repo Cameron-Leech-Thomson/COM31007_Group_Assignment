@@ -13,8 +13,9 @@ import kotlinx.coroutines.launch
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.model.Image
 import uk.ac.shef.oak.com4510.viewmodels.ImageViewModel
+import java.io.Serializable
 
-class PathDetailActivity : Activity() {
+class PathDetailActivity : Activity(), Serializable {
 
     private var imageViewModel: ImageViewModel? = null
     private lateinit var pathDetailAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>
@@ -24,11 +25,11 @@ class PathDetailActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_path_detail)
+        val pathID = intent.getSerializableExtra("path id") as Int
 
         var numberOfColumns: Int = 4
 
-        //TODO get the pathid from the path tab
-        initData(1)
+        initData(pathID)
 
         recyclerView = findViewById(R.id.grid_recycler_view)
         recyclerView?.layoutManager =  GridLayoutManager(this, numberOfColumns)
